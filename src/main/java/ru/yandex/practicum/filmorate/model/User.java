@@ -10,14 +10,17 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
-//@FieldDefaults(level= AccessLevel.PRIVATE)
+@FieldDefaults(level= AccessLevel.PRIVATE)
 public class User {
 
-    int id;
+    private Set<Integer> friends = new HashSet<>();
 
+    int id;
 
     @NotBlank(message = "email не может быть пустым")
     @Email(message = "не верный формат email")

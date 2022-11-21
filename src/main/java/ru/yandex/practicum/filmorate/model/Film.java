@@ -13,11 +13,15 @@ import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
 @FieldDefaults(level= AccessLevel.PRIVATE)
 public class Film {
+
+    private Set<Integer> usersLikes = new HashSet<>();
 
     int id;
 
