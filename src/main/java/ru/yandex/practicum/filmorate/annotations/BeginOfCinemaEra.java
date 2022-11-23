@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.anotation;
+package ru.yandex.practicum.filmorate.annotations;
 
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Retention;

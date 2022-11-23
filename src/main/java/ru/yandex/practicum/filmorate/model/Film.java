@@ -3,7 +3,7 @@ package ru.yandex.practicum.filmorate.model;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
-import ru.yandex.practicum.filmorate.anotation.BeginOfCinemaEra;
+import ru.yandex.practicum.filmorate.annotations.BeginOfCinemaEra;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
