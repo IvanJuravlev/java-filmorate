@@ -5,20 +5,37 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+
+//@Data
+//public class User {
+//
+//    private Set<Integer> friends = new HashSet<>();
+//
+//    @PositiveOrZero
+//    private int id;
+//    @NotBlank(message = "Отсутствует email")
+//    @Email(message = "Некорректный email")
+//    @Email
+//    private final String email;
+//    @NotNull(message = "Отсутствует логин")
+//    @Pattern(regexp = "\\S+", message = "Логин содержит пробелы")
+//    private final String login;
+//    private String name;
+//    @NotNull(message = "Не указана дата рождения")
+//    @PastOrPresent(message = "Некорректная дата рождения")
+//    private final LocalDate birthday;
+
 @Data
-@AllArgsConstructor
+//@AllArgsConstructor
 @FieldDefaults(level= AccessLevel.PRIVATE)
 public class User {
 
-    private Set<Integer> friends = new HashSet<>();
+     Set<Integer> friends = new HashSet<>();
 
     int id;
 
