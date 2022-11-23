@@ -1,20 +1,17 @@
 package ru.yandex.practicum.filmorate.model;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
+import ru.yandex.practicum.filmorate.anotation.BeginOfCinemaEra;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
 
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
 @Data
-//@AllArgsConstructor
 @FieldDefaults(level= AccessLevel.PRIVATE)
 public class Film {
 
@@ -32,6 +29,7 @@ public class Film {
     String description;
 
     @NotNull(message = "дата выхода фильма не может быть null")
+    @BeginOfCinemaEra
     LocalDate releaseDate;
 
     @NotNull(message = "длительность фильма не может быть null")
