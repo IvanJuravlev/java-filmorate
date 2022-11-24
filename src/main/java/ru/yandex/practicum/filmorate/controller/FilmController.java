@@ -17,6 +17,8 @@ public class FilmController {
 
     private final FilmService filmService;
 
+    private static final String ID = "/{id}";
+
     @GetMapping
     public Collection<Film> findAll(){
         return filmService.findAllFilms();
@@ -32,22 +34,22 @@ public class FilmController {
         return filmService.update(film);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(ID)
     public Film getById(@PathVariable int id) {
         return filmService.getById(id);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(ID)
     public Film deleteById(@PathVariable int id) {
         return filmService.deleteById(id);
     }
 
-    @PutMapping("/{id}/like/{userId}")
+    @PutMapping(ID + "/like/{userId}")
     public Film addLike(@PathVariable int id, @PathVariable int userId) {
         return filmService.addLike(id, userId);
     }
 
-    @DeleteMapping("/{id}/like/{userId}")
+    @DeleteMapping(ID + "/like/{userId}")
     public Film removeLike(@PathVariable int id, @PathVariable int userId) {
         return filmService.removeLike(id, userId);
     }

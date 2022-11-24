@@ -18,6 +18,8 @@ public class UserController {
 
     private final UserService userService;
 
+    private static final String ID = "/{id}";
+
     @GetMapping
     public Collection<User> findAll() {
         return userService.findAllUsers();
@@ -33,32 +35,32 @@ public class UserController {
         return userService.update(user);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(ID)
     public User getById(@PathVariable int id) {
         return userService.getById(id);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(ID)
     public User deleteById(@PathVariable int id) {
         return userService.deleteById(id);
     }
 
-    @PutMapping("/{id}/friends/{friendId}")
+    @PutMapping(ID + "/friends/{friendId}")
     public User addFriend(@PathVariable int id, @PathVariable int friendId) {
         return userService.addFriend(id, friendId);
     }
 
-    @DeleteMapping("/{id}/friends/{friendId}")
+    @DeleteMapping(ID + "/friends/{friendId}")
     public User removeFriend(@PathVariable int id, @PathVariable int friendId) {
         return userService.removeFriend(id, friendId);
     }
 
-    @GetMapping("{id}/friends")
+    @GetMapping(ID + "/friends")
     public List<User> getFriendsList(@PathVariable int id) {
         return userService.getFriendsList(id);
     }
 
-    @GetMapping("/{id}/friends/common/{otherId}")
+    @GetMapping(ID + "/friends/common/{otherId}")
     public List<User> getCommonFriends(@PathVariable int id, @PathVariable int otherId) {
         return userService.getManualFriends(id, otherId);
     }
