@@ -5,8 +5,6 @@ import lombok.experimental.FieldDefaults;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 
 @AllArgsConstructor
@@ -17,7 +15,6 @@ import java.util.Set;
 @FieldDefaults(level= AccessLevel.PRIVATE)
 public class User {
 
-  //   Set<Integer> friends = new HashSet<>();
     @PositiveOrZero
     int id;
 

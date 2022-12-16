@@ -26,5 +26,6 @@
 - [GET] /users/{id}/friends/common/{otherId} – get common friends of two users
 
 ## Database scheme
-![Database scheme](https://user-images.githubusercontent.com/106110888/204658409-c2515037-d563-4db9-916d-8e1240e30ec1.png)
+![Screenshot_1955](https://user-images.githubusercontent.com/106110888/208185435-aa36f186-5a10-4b14-bb66-4f62a3eb2f59.png)
+
 
