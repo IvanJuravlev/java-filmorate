@@ -22,48 +22,45 @@ public class UserStorageTests {
 
     private final InDbUserStorage inDbUserStorage;
 
-    @Test
-    void addUserTest() {
+    private User createTestUser (){
         User user = User.builder()
                 .email("example@mail.mail")
                 .login("login")
                 .name("Doe")
                 .birthday(LocalDate.of(2000, 12, 22))
                 .build();
-        inDbUserStorage.create(user);
-        AssertionsForClassTypes.assertThat(user).extracting("id").isNotNull();
-        AssertionsForClassTypes.assertThat(user).extracting("name").isNotNull();
+        return user;
+    }
+
+    @Test
+    void addUserTest() {
+        User newUser = createTestUser();
+
+        inDbUserStorage.create(newUser);
+        AssertionsForClassTypes.assertThat(newUser).extracting("id").isNotNull();
+        AssertionsForClassTypes.assertThat(newUser).extracting("name").isNotNull();
     }
 
 
 
     @Test
     void findUserByIdTest() {
-        User user = User.builder()
-                .email("example@mail.mail")
-                .login("login")
-                .name("Doe")
-                .birthday(LocalDate.of(2000, 12, 22))
-                .build();
+        User newUser = createTestUser();
 
-        inDbUserStorage.create(user);
-        AssertionsForClassTypes.assertThat(inDbUserStorage.getById(user.getId())).hasFieldOrPropertyWithValue("id", user.getId());
+        inDbUserStorage.create(newUser);
+        AssertionsForClassTypes.assertThat(inDbUserStorage.getById(newUser.getId())).hasFieldOrPropertyWithValue("id", newUser.getId());
     }
 
     @Test
     void updateUserByIdTest() {
-        User user = User.builder()
-                .email("example@mail.mail")
-                .login("login")
-                .name("Doe")
-                .birthday(LocalDate.of(2000, 12, 22))
-                .build();
-        inDbUserStorage.create(user);
-        user.setName("testUpdatedName");
-        user.setLogin("testUpdatedLogin");
-        user.setEmail("updatedExample@mail.mail");
-        inDbUserStorage.update(user);
-        AssertionsForClassTypes.assertThat(inDbUserStorage.getById(user.getId()))
+        User newUser = createTestUser();
+
+        inDbUserStorage.create(newUser);
+        newUser.setName("testUpdatedName");
+        newUser.setLogin("testUpdatedLogin");
+        newUser.setEmail("updatedExample@mail.mail");
+        inDbUserStorage.update(newUser);
+        AssertionsForClassTypes.assertThat(inDbUserStorage.getById(newUser.getId()))
                 .hasFieldOrPropertyWithValue("login", "testUpdatedLogin")
                 .hasFieldOrPropertyWithValue("name", "testUpdatedName")
                 .hasFieldOrPropertyWithValue("email", "updatedExample@mail.mail");
@@ -83,130 +80,80 @@ public class UserStorageTests {
 
     @Test
     void addFriendshipTest() {
-        User friend = User.builder()
-                .email("example_friend@mail.mail")
-                .login("friend")
-                .name("Dow")
-                .birthday(LocalDate.of(2000, 12, 22))
-                .build();
-        User follower = User.builder()
-                .email("example_followerd@mail.mail")
-                .login("follower")
-                .name("Doe")
-                .birthday(LocalDate.of(2000, 10, 20))
-                .build();
+        User newUser = createTestUser();
+        User newUser2 = createTestUser();
 
-        inDbUserStorage.create(friend);
-        inDbUserStorage.create(follower);
-        assertThat(inDbUserStorage.getFriends(friend.getId()).isEmpty());
-        inDbUserStorage.addFriend(friend.getId(), follower.getId());
-        assertThat(inDbUserStorage.getFriends(friend.getId())).isNotNull();
-        Assertions.assertThat(inDbUserStorage.getFriends(friend.getId()).size() == 2);
+
+        inDbUserStorage.create(newUser);
+        inDbUserStorage.create(newUser2);
+        assertThat(inDbUserStorage.getFriends(newUser.getId()).isEmpty());
+        inDbUserStorage.addFriend(newUser.getId(), newUser2.getId());
+        assertThat(inDbUserStorage.getFriends(newUser.getId())).isNotNull();
+        Assertions.assertThat(inDbUserStorage.getFriends(newUser.getId()).size() == 2);
     }
 
     @Test
     void removeFriendshipTest() {
-        User friend = User.builder()
-                .email("example_friend@mail.mail")
-                .login("friend")
-                .name("Dow")
-                .birthday(LocalDate.of(2000, 12, 22))
-                .build();
-        User follower = User.builder()
-                .email("example_followerd@mail.mail")
-                .login("follower")
-                .name("Doe")
-                .birthday(LocalDate.of(2000, 10, 20))
-                .build();
+        User newUser = createTestUser();
+        User newUser2 = createTestUser();
 
-        inDbUserStorage.create(friend);
-        inDbUserStorage.create(follower);
-        assertThat(inDbUserStorage.getFriends(friend.getId()).isEmpty());
-        inDbUserStorage.addFriend(friend.getId(), follower.getId());
-        assertThat(inDbUserStorage.getFriends(friend.getId())).isNotNull();
-        Assertions.assertThat(inDbUserStorage.getFriends(friend.getId()).size() == 2);
-        inDbUserStorage.deleteFriend(friend.getId(), follower.getId());
-        Assertions.assertThat(inDbUserStorage.getFriends(friend.getId()).size() == 1);
+
+        inDbUserStorage.create(newUser);
+        inDbUserStorage.create(newUser2);
+        assertThat(inDbUserStorage.getFriends(newUser.getId()).isEmpty());
+        inDbUserStorage.addFriend(newUser.getId(), newUser2.getId());
+        assertThat(inDbUserStorage.getFriends(newUser.getId())).isNotNull();
+        Assertions.assertThat(inDbUserStorage.getFriends(newUser.getId()).size() == 2);
+        inDbUserStorage.deleteFriend(newUser.getId(), newUser2.getId());
+        Assertions.assertThat(inDbUserStorage.getFriends(newUser.getId()).size() == 1);
     }
 
     @Test
     void getFriendshipTest() {
-        User friend = User.builder()
-                .email("example_friend@mail.mail")
-                .login("friend")
-                .name("Dow")
-                .birthday(LocalDate.of(2000, 12, 22))
-                .build();
-        User follower = User.builder()
-                .email("example_followerd@mail.mail")
-                .login("follower")
-                .name("Doe")
-                .birthday(LocalDate.of(2000, 10, 20))
-                .build();
-        inDbUserStorage.create(friend);
-        inDbUserStorage.create(follower);
-        assertThat(inDbUserStorage.getFriends(friend.getId()).isEmpty());
-        inDbUserStorage.addFriend(friend.getId(), follower.getId());
-        Assertions.assertThat(inDbUserStorage.getFriends(friend.getId()).size() == 2);
+        User newUser = createTestUser();
+        User newUser2 = createTestUser();
+
+        inDbUserStorage.create(newUser);
+        inDbUserStorage.create(newUser2);
+        assertThat(inDbUserStorage.getFriends(newUser.getId()).isEmpty());
+        inDbUserStorage.addFriend(newUser.getId(), newUser2.getId());
+        Assertions.assertThat(inDbUserStorage.getFriends(newUser.getId()).size() == 2);
     }
 
 
     @Test
     void getCommonFriendshipTest() {
-        User friend = User.builder()
-                .email("example_friend@mail.mail")
-                .login("friend")
-                .name("Dow")
-                .birthday(LocalDate.of(2000, 12, 22))
-                .build();
-        User follower = User.builder()
-                .email("example_followerd@mail.mail")
-                .login("follower")
-                .name("Doe")
-                .birthday(LocalDate.of(2000, 10, 20))
-                .build();
-        User following = User.builder()
-                .email("example_followingd@mail.mail")
-                .login("following")
-                .name("Dire")
-                .birthday(LocalDate.of(2000, 11, 21))
-                .build();
+        User newUser = createTestUser();
+        User newUser2 = createTestUser();
+        User newUser3 = createTestUser();
 
-        inDbUserStorage.create(friend);
-        inDbUserStorage.create(follower);
-        inDbUserStorage.create(following);
-        inDbUserStorage.addFriend(friend.getId(), following.getId());
-        inDbUserStorage.addFriend(follower.getId(), following.getId());
-        Assertions.assertThat(inDbUserStorage.getCommonFriends(friend.getId(), follower.getId()).size() == 1);
+        inDbUserStorage.create(newUser);
+        inDbUserStorage.create(newUser2);
+        inDbUserStorage.create(newUser3);
+        inDbUserStorage.addFriend(newUser.getId(), newUser3.getId());
+        inDbUserStorage.addFriend(newUser2.getId(), newUser3.getId());
+        Assertions.assertThat(inDbUserStorage.getCommonFriends(newUser.getId(), newUser2.getId()).size() == 1);
     }
 
     @Test
     void getAllUsersTest() {
-        User user = User.builder()
-                .email("example@mail.mail")
-                .login("login")
-                .name("Doe")
-                .birthday(LocalDate.of(2000, 12, 22))
-                .build();
-        inDbUserStorage.create(user);
+        User newUser = createTestUser();
+
+        inDbUserStorage.create(newUser);
         Collection<User> users = inDbUserStorage.getAllUsers();
         Assertions.assertThat(users).isNotEmpty().isNotNull().doesNotHaveDuplicates();
-        Assertions.assertThat(users).extracting("email").contains(user.getEmail());
-        Assertions.assertThat(users).extracting("login").contains(user.getLogin());
+        Assertions.assertThat(users).extracting("email").contains(newUser.getEmail());
+        Assertions.assertThat(users).extracting("login").contains(newUser.getLogin());
     }
 
     @Test
     void removeUserByIdTest() {
-        User user = User.builder()
-                .email("example@mail.mail")
-                .login("login")
-                .name("Doe")
-                .birthday(LocalDate.of(2000, 12, 22))
-                .build();
+        User newUser = createTestUser();
 
-        inDbUserStorage.create(user);
-        inDbUserStorage.delete(user.getId());
-        Assertions.assertThatThrownBy(()->inDbUserStorage.getById(user.getId()))
+
+        inDbUserStorage.create(newUser);
+        inDbUserStorage.delete(newUser.getId());
+        Assertions.assertThatThrownBy(()->inDbUserStorage.getById(newUser.getId()))
                 .isInstanceOf(ObjectNotFoundException.class);
     }
 }

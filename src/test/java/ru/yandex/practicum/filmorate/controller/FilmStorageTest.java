@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;//package ru.yandex.practicum.filmorate.controller;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import ru.yandex.practicum.filmorate.exception.ObjectNotFoundException;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -26,45 +27,66 @@ public class FilmStorageTest {
 
     private final InDbUserStorage inDbUserStorage;
 
-    private Film film = Film.builder()
-            .name("testFilm")
-            .description("desc")
-            .releaseDate(LocalDate.of(2020, 1, 1))
-            .duration(110)
-            .mpa(new Mpa(1, "G"))
-            .genres(null)
-            .build();
+
+    private Film createTestFilm(){
+        Film film = Film.builder()
+                .name("testFilm")
+                .description("desc")
+                .releaseDate(LocalDate.of(2020, 1, 1))
+                .duration(110)
+                .mpa(new Mpa(1, "G"))
+                .genres(null)
+                .build();
+        return film;
+    }
+
+
+   private User createTestUser() {
+       User user = User.builder()
+               .id(1)
+               .email("example@mail.mail")
+               .login("login")
+               .name("Doe")
+               .birthday(LocalDate.of(2000, 12, 22))
+               .build();
+   return user;
+    }
+
+
 
     @Test
     void addFilmTest() {
-        inDbFilmStorage.create(film);
-        AssertionsForClassTypes.assertThat(film).extracting("id").isNotNull();
-        AssertionsForClassTypes.assertThat(film).extracting("name").isNotNull();
+        inDbFilmStorage.create(createTestFilm());
+        AssertionsForClassTypes.assertThat(createTestFilm()).extracting("id").isNotNull();
+        AssertionsForClassTypes.assertThat(createTestFilm()).extracting("name").isNotNull();
     }
 
     @Test
     void updateFilmTest() {
-        inDbFilmStorage.create(film);
-        film.setName("testUpdateFilm");
-        film.setDescription("testUpdateDesc");
-        inDbFilmStorage.update(film);
-        AssertionsForClassTypes.assertThat(inDbFilmStorage.getById(film.getId()))
+        Film newFilm = createTestFilm();
+        inDbFilmStorage.create(newFilm);
+        newFilm.setName("testUpdateFilm");
+        newFilm.setDescription("testUpdateDesc");
+        inDbFilmStorage.update(newFilm);
+        AssertionsForClassTypes.assertThat(inDbFilmStorage.getById(newFilm.getId()))
                 .hasFieldOrPropertyWithValue("name", "testUpdateFilm")
                 .hasFieldOrPropertyWithValue("description", "testUpdateDesc");
     }
 
     @Test
     void getFilmTest() {
-        inDbFilmStorage.create(film);
-        inDbFilmStorage.getById(film.getId());
-        AssertionsForClassTypes.assertThat(inDbFilmStorage.getById(film.getId())).hasFieldOrPropertyWithValue("id", film.getId());
+        Film newFilm = createTestFilm();
+        inDbFilmStorage.create(newFilm);
+        inDbFilmStorage.getById(newFilm.getId());
+        AssertionsForClassTypes.assertThat(inDbFilmStorage.getById(newFilm.getId())).hasFieldOrPropertyWithValue("id", newFilm.getId());
     }
 
     @Test
     void removeFilmTest() {
-        inDbFilmStorage.create(film);
-        inDbFilmStorage.delete(film.getId());
-        AssertionsForClassTypes.assertThat(film).hasFieldOrPropertyWithValue("id", film.getId());
+        Film newFilm = createTestFilm();
+        inDbFilmStorage.create(newFilm);
+        inDbFilmStorage.delete(newFilm.getId());
+        AssertionsForClassTypes.assertThat(newFilm).hasFieldOrPropertyWithValue("id", newFilm.getId());
     }
 
     @Test
@@ -83,123 +105,60 @@ public class FilmStorageTest {
 
     @Test
     void addLikeFilmTest() {
-        User user = User.builder()
-                .id(1)
-                .email("example@mail.mail")
-                .login("login")
-                .name("Doe")
-                .birthday(LocalDate.of(2000, 12, 22))
-                .build();
+        Film newFilm = createTestFilm();
+        User newUser = createTestUser();
 
-        Film filmForLike = Film.builder()
-                .name("testFilm")
-                .description("desc")
-                .releaseDate(LocalDate.of(2020, 1, 1))
-                .duration(110)
-                .mpa(new Mpa(1, "G"))
-                .genres(null)
-                .build();
-
-        inDbUserStorage.create(user);
-        inDbFilmStorage.create(filmForLike);
-        System.out.println(user.getId() + " - Это юзер Id!");
-        System.out.println(filmForLike.getId() + " - Это фильм Id!");
-        inDbFilmStorage.likeFilm(filmForLike.getId(), user.getId());
-        assertThat(inDbFilmStorage.getPopularFilms(filmForLike.getId()).isEmpty());
-        assertThat(inDbFilmStorage.getPopularFilms(filmForLike.getId())).isNotNull();
-        Assertions.assertThat(inDbFilmStorage.getPopularFilms(filmForLike.getId()).size() == 2);
+        inDbUserStorage.create(newUser);
+        inDbFilmStorage.create(newFilm);
+        System.out.println(newUser.getId() + " - Это юзер Id!");
+        System.out.println(newFilm.getId() + " - Это фильм Id!");
+        inDbFilmStorage.likeFilm(newFilm.getId(), newUser.getId());
+        assertThat(inDbFilmStorage.getPopularFilms(newFilm.getId()).isEmpty());
+        assertThat(inDbFilmStorage.getPopularFilms(newFilm.getId())).isNotNull();
+        Assertions.assertThat(inDbFilmStorage.getPopularFilms(newFilm.getId()).size() == 2);
     }
 
     @Test
     void removeFilmLikeTest() {
-        User user1 = User.builder()
-                .id(1)
-                .email("example@mail.mail")
-                .login("login")
+        Film newFilm = createTestFilm();
+        User newUser = createTestUser();
 
-                .name("Doe")
-                .birthday(LocalDate.of(2000, 12, 22))
-                .build();
-
-        Film filmForLike = Film.builder()
-                .name("testFilm")
-                .description("desc")
-                .releaseDate(LocalDate.of(2020, 1, 1))
-                .duration(110)
-                .mpa(new Mpa(1, "G"))
-                .genres(null)
-                .build();
-
-        inDbUserStorage.create(user1);
-        inDbFilmStorage.create(filmForLike);
-        inDbFilmStorage.create(filmForLike);
-        inDbFilmStorage.likeFilm(filmForLike.getId(), user1.getId());
-        inDbFilmStorage.deleteLike(filmForLike.getId(), user1.getId());
-        assertThat(inDbFilmStorage.getPopularFilms(filmForLike.getId()).isEmpty());
-        assertThat(inDbFilmStorage.getPopularFilms(filmForLike.getId())).isNotNull();
-        Assertions.assertThat(inDbFilmStorage.getPopularFilms(filmForLike.getId()).size() == 1);
+        inDbUserStorage.create(newUser);
+        inDbFilmStorage.create(newFilm);
+        inDbFilmStorage.create(newFilm);
+        inDbFilmStorage.likeFilm(newFilm.getId(), newUser.getId());
+        inDbFilmStorage.deleteLike(newFilm.getId(), newUser.getId());
+        assertThat(inDbFilmStorage.getPopularFilms(newFilm.getId()).isEmpty());
+        assertThat(inDbFilmStorage.getPopularFilms(newFilm.getId())).isNotNull();
+        Assertions.assertThat(inDbFilmStorage.getPopularFilms(newFilm.getId()).size() == 1);
     }
 
     @Test
     void getBestFilmTest() {
+        Film newFilm = createTestFilm();
+        Film newFilm2 = createTestFilm();
 
-        Film filmForLike = Film.builder()
-                .name("testFilm")
-                .description("desc")
-                .releaseDate(LocalDate.of(2020, 1, 1))
-                .duration(110)
-                .mpa(new Mpa(1, "G"))
-                .genres(null)
-                .build();
 
-        Film otherFilmForLike = Film.builder()
-                .name("testFilm")
-                .description("desc")
-                .releaseDate(LocalDate.of(2020, 1, 1))
-                .duration(110)
-                .mpa(new Mpa(1, "G"))
-                .genres(null)
-                .build();
+        inDbFilmStorage.create(createTestFilm());
+        inDbFilmStorage.create(newFilm);
+        inDbFilmStorage.create(newFilm2);
 
-        inDbFilmStorage.create(film);
-        inDbFilmStorage.create(filmForLike);
-        inDbFilmStorage.create(otherFilmForLike);
+        User newUser = createTestUser();
+        User newUser2 = createTestUser();
+        User newUser3 = createTestUser();
 
-        User user = User.builder()
-                .id(1)
-                .email("example@mail.mail")
-                .login("login")
-                .name("Doe")
-                .birthday(LocalDate.of(2000, 12, 22))
-                .build();
 
-        User user1 = User.builder()
-                .id(1)
-                .email("example@mail.mail")
-                .login("login")
-                .name("Doe")
-                .birthday(LocalDate.of(2000, 12, 22))
-                .build();
+        inDbUserStorage.create(newUser);
+        inDbUserStorage.create(newUser2);
+        inDbUserStorage.create(newUser3);
 
-        User user2= User.builder()
-                .id(1)
-                .email("example@mail.mail")
-                .login("login")
-                .name("Doe")
-                .birthday(LocalDate.of(2000, 12, 22))
-                .build();
-
-        inDbUserStorage.create(user);
-        inDbUserStorage.create(user1);
-        inDbUserStorage.create(user2);
-
-        inDbFilmStorage.likeFilm(film.getId(), user.getId());
-        inDbFilmStorage.likeFilm(filmForLike.getId(), user1.getId());
-        inDbFilmStorage.likeFilm(otherFilmForLike.getId(), user2.getId());
-        inDbFilmStorage.likeFilm(film.getId(), user1.getId());
-        inDbFilmStorage.likeFilm(film.getId(), user2.getId());
-        assertThat(inDbFilmStorage.getPopularFilms(film.getId())).isNotNull();
-        Assertions.assertThat(inDbFilmStorage.getPopularFilms(film.getId()).size() == 6);
+        inDbFilmStorage.likeFilm(newFilm.getId(), newUser.getId());
+        inDbFilmStorage.likeFilm(newFilm.getId(), newUser2.getId());
+        inDbFilmStorage.likeFilm(newFilm2.getId(), newUser3.getId());
+        inDbFilmStorage.likeFilm(newFilm.getId(), newUser2.getId());
+        inDbFilmStorage.likeFilm(newFilm.getId(), newUser3.getId());
+        assertThat(inDbFilmStorage.getPopularFilms(newFilm.getId())).isNotNull();
+        Assertions.assertThat(inDbFilmStorage.getPopularFilms(newFilm.getId()).size() == 6);
     }
 }
 
