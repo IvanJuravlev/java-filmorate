@@ -1,22 +1,21 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.AccessLevel;
-import lombok.Data;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 
-@Data
-
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Builder(toBuilder = true)
 @FieldDefaults(level= AccessLevel.PRIVATE)
 public class User {
 
-     Set<Integer> friends = new HashSet<>();
-
+    @PositiveOrZero
     int id;
 
     @NotBlank(message = "email не может быть пустым")
