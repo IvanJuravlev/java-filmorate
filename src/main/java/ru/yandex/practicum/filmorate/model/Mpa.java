@@ -1,15 +1,15 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.experimental.FieldDefaults;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-
-@Data
-@FieldDefaults(level= AccessLevel.PRIVATE)
+@Getter
+@EqualsAndHashCode
+@NoArgsConstructor
 @AllArgsConstructor
 public class Mpa {
-     int id;
-     String name;
+    int id;
+    String name;
 }
