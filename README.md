@@ -1,27 +1,82 @@
+
 # Filmorate
 
-## Endpoints
+---
 
-### Films
-- `[GET] /films` – getting all films
-- `[GET] /films/{id}` – getting film by id
-- `[POST] /films` – creating of new film
-- `[PUT] /films` – updating of film
-- `[DELETE] /films` – deleting of film
-- `[GET] /films/popular?count={count}` – getting `count` of the most popular films
-- `[PUT] /films/{id}/like/{userId}` – like film with id = `id` by user with id = `userId`
-- `[DELETE] /films/{id}/like/{userId}` – delete like from film with id = `id` by user with id = `userId`
+## Описание
 
-### Users
-- `[GET] /users` – getting all users
-- `[GET] /users/{id}` – getting user by id
-- `[POST] /users` – creating of new user
-- `[PUT] /users` – updating of user
-- `[DELETE] /users` – deleting of user
-- `[PUT] /users/{id}/friends/{friendId}` – make friends two users
-- `[DELETE] /users/{id}/friends/{friendId}` – stop friendship of two users
-- `[GET] /users/{id}/friends` – get all friends of user
-- `[GET] /users/{id}/friends/common/{otherId}` – get common friends of two users
+Сервис для обработки фильмов и их оценок от пользователей
 
-## Database scheme
+## Функционал
+
+- добавление, редактирование, получение или удаление пользователей
+- получение списка пользователей
+- добавление, удаление друзей
+- получение списка друзей
+- получение общих друзей с другим пользователем
+- добавление, редактирование, получение или удаление фильмов
+- добавление, удаление лайков
+- получение списка фильмов
+- получение списка популярных фильмов
+- получение жанра или всех жанров
+- получение возрастного рейтинга или всех рейтингов MPA
+
+### Диаграмма базы данных
+
 ![Database scheme](scheme.png)
+
+### Эндпоинты
+
+---
+
+#### Film
+
+| Method | Endpoint                  | Description               |
+|--------|---------------------------|---------------------------|
+| POST   | /films                    | Creates a new film        |
+| PUT    | /films                    | Updated film              |
+| PUT    | /films/{id}/like/{userId} | Like the Film             |
+| GET    | /films/{id}               | Get film by id            |
+| GET    | /films/popular            | Get popular films         |
+| GET    | /films                    | Get all films             |
+| DELETE | /films/{id}               | Remove film by id         |
+| DELETE | /films/{id}/like/{userId} | Remove film's like by id  |
+
+#### User
+
+| Method | Endpoint                             | Description                    |
+|--------|--------------------------------------|--------------------------------|
+| POST   | /users                               | Creates a new user             |
+| PUT    | /users                               | Updated user                   |
+| PUT    | /users/{id}/friends/{friendId}       | Adds a friend                  |
+| GET    | /users/{id}                          | Get users by id                |
+| GET    | /users                               | Get all users                  |
+| GET    | /users/{id}/friends                  | Get friends by user id         |
+| GET    | /users/{id}/friends/common/{otherId} | Get common friends by user id  |
+| DELETE | /users/{id}/friends/{friendId}       | Remove from friends by user id |
+| DELETE | /users/{id}                          | Remove user by id              |
+
+#### Mpa
+
+| Method | Endpoint                             | Description     |
+|--------|--------------------------------------|-----------------|
+| GET    | /mpa                                 | Get all mpa     |
+| GET    | /mpa/{id}                            | Get mpa by id   |
+
+#### Genre
+
+| Method | Endpoint                       | Description     |
+|--------|--------------------------------|-----------------|
+| GET    | /genre                         | Get all genres  |
+| GET    | /genre/{id}                    | Get genre by id |
+
+### Стек:
+
+- Java 11
+- Spring Boot
+- JDBC
+- H2
+- Maven
+- Lombok
+- JUnit 4
+- Postman
